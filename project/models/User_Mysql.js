@@ -2,9 +2,9 @@
 var db = require('../db.js');
 var SQLHelper = require('../helpers/sqlHelper');
 
-exports.create = function (userName, password, usermail, done) {
-    var values = [userName, password, usermail];
-    db.get().query('INSERT INTO users (username, password, emailid) VALUES(?, ?, ?)', values, function (err, result) {
+exports.create = function (userName, password, usermail, fname, lname, phone, address, done) {
+    var values = [userName, password, usermail, fname, lname, phone, address];
+    db.get().query('INSERT INTO users (username, password, emailid, fname, lname, phone, address) VALUES(?, ?, ?, ?, ?, ?, ?)', values, function (err, result) {
         if (err) return done(err);
         //console.log("created user with name " + userName + " with ID " + result.insertId);
         done(null, result.insertId);

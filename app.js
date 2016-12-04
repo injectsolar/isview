@@ -39,8 +39,8 @@ app.use(morgan('dev'));
 app.set('json spaces', 1);
 
 //the sendgrid API key
-//app.set('sendgridkey', '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');
-process.env.sendgridkey = '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';
+
+process.env.sendgridkey = '';
 
 app.use(favicon(__dirname + '/project/public/img/favicon.ico'));
 
@@ -50,6 +50,7 @@ app.use('/', require('./project/controllers/auth'));
 app.use('/', require('./project/controllers/general'));
 app.use('/api/applications', require('./project/controllers/application'));
 app.use('/api/approvals', require('./project/controllers/approval'));
+app.use('/test/usertest', require('./project/controllers/testing'));
 
 
 // catch 404 and forward to error handler

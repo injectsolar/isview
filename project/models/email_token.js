@@ -35,12 +35,20 @@ exports.create = function (username, done) {
     });
 };
 
+exports.get = function (id, done) {
+    var values = [id];
+    db.get().query('SELECT * FROM users_verification WHERE id = ?', values, function (err, rows) {
+        if (err) return done(err);
+        done(null, rows);
+    });
+};
+
 exports.getByUserId = function (user_id, done) {
     var values = [user_id];
     db.get().query('SELECT * FROM users_verification WHERE users_id = ?', values, function (err, rows) {
         if (err) return done(err);
         done(null, rows);
-    })
+    });
 };
 
 exports.getAll = function (done) {

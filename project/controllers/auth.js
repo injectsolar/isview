@@ -6,7 +6,7 @@ router.get('/login', function (req, res) {
     if (req.isAuthenticated()) {
         res.redirect('/');
     }
-    res.render('login.ejs', {message: req.flash('loginMessage')});
+    res.render('login-new.ejs', {message: req.flash('loginMessage')});
 });
 
 router.get('/signup', function (req, res) {
@@ -25,8 +25,8 @@ router.post('/login', passport.authenticate('local-login', {
 }));
 
 router.post('/signup', passport.authenticate('local-signup', {
-    successRedirect: '/',
-    failureRedirect: '/signup',
+    successRedirect: '/signupemailsent',
+    failureRedirect: '/login',
     failureFlash: true
 }));
 

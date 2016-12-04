@@ -11,6 +11,10 @@ router.get('/', function (req, res) {
     res.redirect('/home');
 });
 
+router.get('/signupemailsent', function (req, res) {
+    res.render('signupemailsent');
+});
+
 router.get('/home', function (req, res) {
     //console.log((typeof req.user == 'undefined') ? "undefined" : req.user.username);
     res.render('home', {user: req.user});
