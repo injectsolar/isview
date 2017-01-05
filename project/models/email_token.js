@@ -51,6 +51,14 @@ exports.getByUserId = function (user_id, done) {
     });
 };
 
+exports.getByToken = function (token, done) {
+    var values = [token];
+    db.get().query('SELECT * FROM users_verification WHERE token = ?', values, function (err, rows) {
+        if (err) return done(err);
+        done(null, rows);
+    });
+};
+
 exports.getAll = function (done) {
     db.get().query(SQLHelper.createSQLGetString('users', ['username', 'password'], [], []), function (err, rows) {
         if (err) return done(err);

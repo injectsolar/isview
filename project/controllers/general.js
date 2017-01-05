@@ -3,6 +3,7 @@ var router = express.Router();
 var Application = require('../models/application.js');
 var Approval = require('../models/approval.js');
 var Email_Token = require('../models/email_token.js');
+var User = require('../models/User_Mysql');
 
 var nodemailer = require('nodemailer');
 var sgTransport = require('nodemailer-sendgrid-transport');
@@ -120,4 +121,45 @@ router.get('/verify', function (req, res, next) {
 
 });
 
+router.get("/verifytoken", function (req, res, next) {
+    var token = req.query.token;
+    // get the user by token and then if the user is present, mark the user as verified via email
+    Email_Token.getByToken(token, function (err, tokenRows) {
+        if (err) {
+            return next(err);
+        }
+        // rows will be like [{"id":2,"users_id":7,"token":"e3acd91b03ec3a2223d7fe90884d236f6c87f4c1","expires_at":"2016-11-23T13:37:32.000Z","created_at":"2016-11-22T13:37:32.000Z"}]
+
+        // get the user by users_id
+        if (!(tokenRows.length > 0 && tokenRows[0].users_id != undefined)) {
+            res.json({message: "user was not found by this token to verify"});
+        }
+        // checking the token expiration
+        var dateDiff = (new Date()).getTime() - (new Date(tokenRows[0].expires_at)).getTime();
+        if (dateDiff > 0) {
+            res.json({message: "This email verification link was expired " + Math.round(dateDiff / (10 * 3600 * 24)) / 100 + " days ago..."});
+            return;
+        }
+        User.get(tokenRows[0].users_id, function (err, users) {
+            if (err) {
+                return next(err);
+            }
+            // rows will be like [{"id":7,"username":"sudhir","emailid":"nagasudhirpulla@gmail","password":"abc123","fname":"NA","lname":"NA","phone":"NA","address":"NA","created_at":"2016-11-22T13:37:32.000Z","updated_at":"2016-12-04T06:35:47.000Z","is_verified":0}]
+            // console.log("users rows are " + JSON.stringify(users));
+
+            if (users[0].is_verified == 1) {
+                res.json({message: "The user is already verified via email"});
+                return;
+            }
+
+            User.updateIsVerifiedValue(users[0].id, 1, function (err, result) {
+                if (err) {
+                    return next(err);
+                }
+                //console.log("result of user update verified is " + JSON.stringify(result));
+                res.json({message: "The user is verified via email"});
+            });
+        });
+    });
+});
 module.exports = router;

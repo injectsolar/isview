@@ -43,6 +43,15 @@ exports.deleteByName = function (name, done) {
     })
 };
 
+//stub
+exports.updateIsVerifiedValue = function (id, val, done) {
+    var values = [val, id];
+    db.get().query('UPDATE users SET is_verified = ? WHERE id = ?', values, function (err, result) {
+        if (err) return done(err);
+        done(null, result);
+    })
+};
+
 exports.generateHash = function (password) {
     //return bcrypt.hashSync(password, bcrypt.genSaltSync(9));
     return password;
