@@ -82,8 +82,18 @@ passport.use('local-login', new LocalStrategy({
                 if (err)
                     return done(err);
                 if (!users[0]) {
-                    return done(null, false, req.flash('loginMessage', 'No User found'));
-                    // todo find the user by email instead
+                    User.getByEmail(email, function (err, users) {
+                        if (err) {
+                            return done(err);
+                        }
+                        if (!users[0]) {
+                            return done(null, false, req.flash('loginMessage', 'No User found'));
+                        }
+                        if (!User.validPassword(password, users[0].password)) {
+                            return done(null, false, req.flash('loginMessage', 'invalid password'));
+                        }
+                        return done(null, users[0]);
+                    });
                 }
                 if (!User.validPassword(password, users[0].password)) {
                     return done(null, false, req.flash('loginMessage', 'invalid password'));
