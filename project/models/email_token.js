@@ -58,20 +58,3 @@ exports.getByToken = function (token, done) {
         done(null, rows);
     });
 };
-
-exports.getAll = function (done) {
-    db.get().query(SQLHelper.createSQLGetString('users', ['username', 'password'], [], []), function (err, rows) {
-        if (err) return done(err);
-        done(null, rows);
-    })
-};
-
-
-exports.delete = function (token, done) {
-    var values = [token];
-    db.get().query('DELETE FROM users WHERE username = ?', values, function (err, result) {
-        if (err) return done(err);
-        //console.log("Number of rows deleted is " + result.affectedRows);
-        done(null, result);
-    })
-};

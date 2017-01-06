@@ -34,6 +34,14 @@ exports.getByName = function (name, done) {
     })
 };
 
+exports.getByEmail = function (emailId, done) {
+    var values = [emailId];
+    db.get().query('SELECT * FROM users WHERE emailid = ?', values, function (err, rows) {
+        if (err) return done(err);
+        done(null, rows);
+    })
+};
+
 exports.deleteByName = function (name, done) {
     var values = [name];
     db.get().query('DELETE FROM users WHERE username = ?', values, function (err, result) {
@@ -43,10 +51,17 @@ exports.deleteByName = function (name, done) {
     })
 };
 
-//stub
 exports.updateIsVerifiedValue = function (id, val, done) {
     var values = [val, id];
     db.get().query('UPDATE users SET is_verified = ? WHERE id = ?', values, function (err, result) {
+        if (err) return done(err);
+        done(null, result);
+    })
+};
+
+exports.updatePassword = function (id, val, done) {
+    var values = [val, id];
+    db.get().query('UPDATE users SET password = ? WHERE id = ?', values, function (err, result) {
         if (err) return done(err);
         done(null, result);
     })
