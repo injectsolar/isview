@@ -225,7 +225,10 @@ router.get('/resetpassword', function (req, res) {
 router.post("/resetpassword", function (req, res, next) {
     var token = req.body.token;
     var newPassword = req.body.newpassword;
-    // todo get the confirm password feild also and check for equality
+    if(newPassword != req.body.newpasswordconfirm){
+        res.json({message: "password and confirm password fields do not match"});
+        return;
+    }
     // get the user by token and then if the user is present, then show them the password reset screen
     Password_token.getByToken(token, function (err, tokenRows) {
         if (err) {

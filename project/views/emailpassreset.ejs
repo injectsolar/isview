@@ -15,7 +15,7 @@
     <div id="frgtpass">
         <h1 style="text-align:left">Select Your Login Password!</h1>
 
-        <form action="./resetpassword" method="post">
+        <form action="./resetpassword" method="post" onsubmit="return matchPasswords()">
 
             <div class="field-wrap">
                 <label>
@@ -27,7 +27,7 @@
                 <label>
                     Confirm Password<span class="req">*</span>
                 </label>
-                <input type="text" required autocomplete="off"/>
+                <input type="text" id="newpasswordconfirm" name="newpasswordconfirm" required autocomplete="off"/>
             </div>
 
             <div class="field-wrap" style="display: none">
@@ -52,5 +52,23 @@
 </div>
 <!-- /form -->
 <script src='./libs/js/jquery.min.js'></script>
+<script src='./js/login.js'></script>
+<script>
+    function matchPasswords() {
+        var pass1 = document.getElementById("newpassword").value;
+        var pass2 = document.getElementById("newpasswordconfirm").value;
+        var ok = true;
+        if (pass1 != pass2) {
+            alert("Passwords Do not match");
+            document.getElementById("newpassword").style.borderColor = "#E34234";
+            document.getElementById("newpasswordconfirm").style.borderColor = "#E34234";
+            ok = false;
+        }
+        else {
+            //alert("Passwords Match!!!");
+        }
+        return ok;
+    }
+</script>
 </body>
 </html>
