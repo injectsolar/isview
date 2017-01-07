@@ -171,7 +171,7 @@ router.post('/forgot', function (req, res, next) {
     var target_email_id = req.body.email;
     console.log("email for forgot password is " + target_email_id);
     if (typeof target_email_id == 'undefined' || target_email_id == null) {
-        res.json({message: "No emailId received at the server"});
+        res.render('frgtpass.ejs', {message: "No emailId received at the server"});
         return;
     }
 
@@ -182,7 +182,7 @@ router.post('/forgot', function (req, res, next) {
         }
 
         if (users.length == 0) {
-            res.json({message: "No user exists with this email Id"});
+            res.render('frgtpass.ejs', {message: "No user exists with this email Id"});
             return;
         }
 
@@ -211,7 +211,7 @@ router.post('/forgot', function (req, res, next) {
                     //console.log(err);
                     return next(err);
                 }
-                res.json({"response": response});
+                res.render('frgtpass.ejs', {"message": JSON.stringify(response)});
             });
         });
     });
