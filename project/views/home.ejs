@@ -13,7 +13,7 @@
     <h1>Inject Solar Dashboard</h1>
     <% if (user != null && user.is_verified == 0) { %>
     <h2>Dear <%= user.username %>, please verify your email id by clicking the verification link sent to your email</h2>
-    <h3>To resend the verification email, please click <a href="verify?userid=<%= user.id %>">here</a></h3>
+    <h3>To resend the verification email, please click <a href="./verify?userid=<%= user.id %>">here</a></h3>
     <% } %>
     <div class="push"></div>
 </div>

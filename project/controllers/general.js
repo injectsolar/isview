@@ -109,7 +109,7 @@ router.get('/verify', function (req, res, next) {
             from: 'info@injectsolar.com',
             subject: 'User Email Verification',
             text: 'Via Sendgrid',
-            html: "Click the following link to verify the mail <br> " + "abc.com/?verymailtoken=" + token
+            html: "Click the following link to verify the mail <br> " + "abc.com/verifytoken?token=" + token
         };
 
         mailer.sendMail(email, function (err, response) {
@@ -138,11 +138,6 @@ router.get("/verifytoken", function (req, res, next) {
         // get the user by users_id
         if (!(tokenRows.length > 0 && tokenRows[0].users_id != undefined)) {
             res.json({message: "user was not found by this token to verify"});
-        }
-        // checking the token expiration
-        var dateDiff = (new Date()).getTime() - (new Date(tokenRows[0].expires_at)).getTime();
-        if (dateDiff > 0) {
-            res.json({message: "This email verification link was expired " + Math.round(dateDiff / (10 * 3600 * 24)) / 100 + " days ago..."});
             return;
         }
         User.get(tokenRows[0].users_id, function (err, users) {
@@ -152,6 +147,10 @@ router.get("/verifytoken", function (req, res, next) {
             // rows will be like [{"id":7,"username":"sudhir","emailid":"nagasudhirpulla@gmail","password":"abc123","fname":"NA","lname":"NA","phone":"NA","address":"NA","created_at":"2016-11-22T13:37:32.000Z","updated_at":"2016-12-04T06:35:47.000Z","is_verified":0}]
             // console.log("users rows are " + JSON.stringify(users));
 
+            if (users.length == 0) {
+                res.json({message: "No user was associated with this token"});
+                return;
+            }
             if (users[0].is_verified == 1) {
                 res.json({message: "The user is already verified via email"});
                 return;
@@ -225,7 +224,7 @@ router.get('/resetpassword', function (req, res) {
 router.post("/resetpassword", function (req, res, next) {
     var token = req.body.token;
     var newPassword = req.body.newpassword;
-    if(newPassword != req.body.newpasswordconfirm){
+    if (newPassword != req.body.newpasswordconfirm) {
         res.json({message: "password and confirm password fields do not match"});
         return;
     }
@@ -254,7 +253,7 @@ router.post("/resetpassword", function (req, res, next) {
             // rows will be like [{"id":7,"username":"sudhir","emailid":"nagasudhirpulla@gmail","password":"abc123","fname":"NA","lname":"NA","phone":"NA","address":"NA","created_at":"2016-11-22T13:37:32.000Z","updated_at":"2016-12-04T06:35:47.000Z","is_verified":0}]
             // console.log("users rows are " + JSON.stringify(users));
             if (users.length == 0) {
-                res.json({message: "The user does not exist. So password cannot be reset"});
+                res.json({message: "The user does not exist. So password reset cannot be done"});
                 return;
             }
             if (users[0].password == newPassword) {
