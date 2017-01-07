@@ -45,4 +45,27 @@ exports.getByUserId = function (user_id, done) {
     });
 };
 
-//todo write the codes for delete by users_id and delete by token
+exports.deleteByToken = function(token){
+    var values = [token];
+    db.get().query('DELETE FROM password_change_requests WHERE token = ?', values, function (err, result) {
+        if (err) return done(err);
+        done(null, result);
+    });
+};
+
+exports.deleteByUserId = function(user_id){
+    var values = [user_id];
+    db.get().query('DELETE FROM password_change_requests WHERE users_id = ?', values, function (err, result) {
+        if (err) return done(err);
+        done(null, result);
+    });
+};
+
+exports.deleteBeforeTime = function(time){
+    // time is string with format 2016-11-23 19:07:33 (yyyy-mm-dd hh:mm:ss)
+    var values = [time];
+    db.get().query('DELETE FROM password_change_requests WHERE time < ?', values, function (err, result) {
+        if (err) return done(err);
+        done(null, result);
+    });
+};
