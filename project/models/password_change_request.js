@@ -20,7 +20,7 @@ exports.create = function (user_id, done) {
         for (var i = 0; i < insertColumns.length; i++) {
             sql.set(insertColumns[i], "?", {dontQuote: true});
         }
-        sql.set(tableColumns[3], "DATE_ADD(NOW(), INTERVAL 24 HOUR)", {dontQuote: true});
+        sql.set(tableColumns[2], "DATE_ADD(NOW(), INTERVAL 24 HOUR)", {dontQuote: true});
         db.get().query(sql.toString(), values, function (err, result) {
             if (err) return done(err);
             //console.log("created user with name " + user_id + " with ID " + result.insertId);
