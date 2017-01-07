@@ -24,6 +24,7 @@ router.post('/login', passport.authenticate('local-login', {
     failureFlash: true
 }));
 
+//todo use custom callback to get the desired effect of not logging in the user and showing the success message. Refer passport js documentation -> custom callbacks
 router.post('/signup', passport.authenticate('local-signup', {
     successRedirect: '/signupemailsent',
     failureRedirect: '/login',
