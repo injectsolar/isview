@@ -40,7 +40,7 @@ app.set('json spaces', 1);
 
 //the sendgrid API key
 
-process.env.sendgridkey = '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';
+process.env.sendgridkey = '';
 
 app.use(favicon(__dirname + '/project/public/img/favicon.ico'));
 
