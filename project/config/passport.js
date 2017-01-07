@@ -94,11 +94,12 @@ passport.use('local-login', new LocalStrategy({
                         }
                         return done(null, users[0]);
                     });
+                } else {
+                    if (!User.validPassword(password, users[0].password)) {
+                        return done(null, false, req.flash('loginMessage', 'invalid password'));
+                    }
+                    return done(null, users[0]);
                 }
-                if (!User.validPassword(password, users[0].password)) {
-                    return done(null, false, req.flash('loginMessage', 'invalid password'));
-                }
-                return done(null, users[0]);
             });
         });
     }
