@@ -75,7 +75,7 @@ passport.use('local-signup', new LocalStrategy({
                                                 return done(err);
                                             }
                                             console.log("Sendgrid response is" + JSON.stringify(response));
-                                            return done(null, false, req.flash('loginMessage', "Signup completed, please check mail to verify your account..."));
+                                            return done(null, users[0]);
                                         });
                                     });
                                 });
